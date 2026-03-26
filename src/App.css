@@ -1,0 +1,60 @@
+/* أنيميشن للتغيير السلس للسمة */
+* {
+  transition: background-color 0.3s ease-in-out,
+              color 0.2s ease-in-out,
+              border-color 0.2s ease-in-out,
+              box-shadow 0.2s ease-in-out;
+}
+
+/* أنيميشن لظهور العناصر */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* أنيميشن للبطاقة الرئيسية */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* تطبيق الأنيميشن عند تحميل الصفحة */
+.MuiPaper-root {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* أنيميشن للمهام الجديدة */
+.task-item-enter {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.task-item-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+/* أنيميشن للحذف */
+.task-item-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.task-item-exit-active {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s, transform 0.3s;
+}
