@@ -1,16 +1,46 @@
-# React + Vite
+# 📝 Todo List App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, feature-rich Todo List application built with React. Manage your daily tasks with dark mode, search, filtering, sorting, and persistent storage.
 
-Currently, two official plugins are available:
+![Todo List App Screenshot](screenshot.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Live Demo
 
-## React Compiler
+[View Live Demo](https://karam-todo-app.netlify.app)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Feature | Description |
+|---------|-------------|
+| ➕ **Add Tasks** | Create new tasks with a title |
+| ✏️ **Edit Tasks** | Modify existing task titles |
+| ✅ **Complete Tasks** | Mark tasks as complete/incomplete |
+| 🗑️ **Delete Tasks** | Remove individual tasks |
+| 🧹 **Clear Completed** | Delete all completed tasks at once |
+| 🔍 **Search** | Filter tasks by title text |
+| 🏷️ **Filter** | View All / Active / Completed tasks |
+| 📅 **Sort** | Sort tasks by date (Newest/Oldest first) |
+| 🌙 **Dark Mode** | Toggle between light and dark themes |
+| 💾 **Persistent Storage** | Tasks saved in browser localStorage |
+| 📱 **Responsive** | Works on desktop, tablet, and mobile |
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| **React 18** | UI library |
+| **Context API + useReducer** | State management |
+| **Material UI (MUI)** | Component library |
+| **Framer Motion** | Animations |
+| **Vite** | Build tool |
+| **localStorage** | Data persistence |
+| **Git & GitHub** | Version control |
+| **Netlify** | Deployment |
+
+---
+
+## 📁 Project Structure
