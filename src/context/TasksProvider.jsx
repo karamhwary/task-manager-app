@@ -1,69 +1,129 @@
-import React from "react";
-import { useReducer } from "react";
+import React, { useEffect, useState } from "react";
 import { TasksContext } from "./tasksContext";
-import { useEffect } from "react";
-function getInitialTasks() {
-  const saved = localStorage.getItem("tasks");
-  return saved ? JSON.parse(saved) : [];
-}
-function reducer(state, action) {
-  if (action.type === "ADD-TASK") {
-    return [...state, action.payload];
-  }
-  if (action.type === "REMOVE-TASK") {
-    return state.filter((task) => task.id !== action.payload);
-  }
-  if (action.type === "TOGGLE-TASK") {
-    return state.map((task) =>
-      task.id === action.payload
-        ? { ...task, completed: !task.completed }
-        : task,
-    );
-  }
-  if (action.type === "CLEAR_COMPLETED") {
-    return state.filter((task) => !task.completed);
-  }
-  if (action.type === "EDIT-TASK") {
-    return state.map(
-      (task) =>
-        task.id === action.payload.taskId
-          ? { ...task, title: action.payload.newTitle } 
-          : task, 
-    );
-  }
-  return state;
-}
+import { supabase } from "../supabaseClient";
+import { useAuth } from "./AuthContext";
+
 export default function TasksProvider({ children }) {
-  const [tasks, taskdispatch] = useReducer(reducer, [], getInitialTasks);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+    if (user) {
+      fetchTasks();
+    } else {
+      setTasks([]);
+      setLoading(false);
+    }
+  }, [user]);
 
-  function addTask(task) {
-    taskdispatch({ type: "ADD-TASK", payload: task });
-  }
+  const fetchTasks = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("tasks")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
 
-  function removeTask(taskId) {
-    taskdispatch({ type: "REMOVE-TASK", payload: taskId });
-  }
-  function toggleTask(taskId) {
-    taskdispatch({ type: "TOGGLE-TASK", payload: taskId });
-  }
+    if (error) {
+      console.error("Error fetching tasks:", error);
+    } else {
+      setTasks(data || []);
+    }
+    setLoading(false);
+  };
 
-  function clearCompleted() {
-    taskdispatch({ type: "CLEAR_COMPLETED" });
-  }
-  function editTask(taskId, newTitle) {
-    taskdispatch({ type: "EDIT-TASK", payload: { taskId, newTitle } });
-  }
+  const addTask = async (task) => {
+    const newTask = {
+      ...task,
+      user_id: user.id,
+    };
+
+    const { data, error } = await supabase
+      .from("tasks")
+      .insert([newTask])
+      .select();
+
+    if (error) {
+      console.error("Error adding task:", error);
+    } else {
+      setTasks([data[0], ...tasks]);
+    }
+  };
+
+  const removeTask = async (taskId) => {
+    const { error } = await supabase.from("tasks").delete().eq("id", taskId);
+
+    if (error) {
+      console.error("Error deleting task:", error);
+    } else {
+      setTasks(tasks.filter((task) => task.id !== taskId));
+    }
+  };
+
+  const toggleTask = async (taskId) => {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
+
+    const { error } = await supabase
+      .from("tasks")
+      .update({ completed: !task.completed })
+      .eq("id", taskId);
+
+    if (error) {
+      console.error("Error toggling task:", error);
+    } else {
+      setTasks(
+        tasks.map((t) =>
+          t.id === taskId ? { ...t, completed: !t.completed } : t,
+        ),
+      );
+    }
+  };
+
+  const clearCompleted = async () => {
+    const completedTasks = tasks.filter((t) => t.completed);
+
+    const { error } = await supabase
+      .from("tasks")
+      .delete()
+      .in(
+        "id",
+        completedTasks.map((t) => t.id),
+      );
+
+    if (error) {
+      console.error("Error clearing completed:", error);
+    } else {
+      setTasks(tasks.filter((t) => !t.completed));
+    }
+  };
+
+  const editTask = async (taskId, newTitle) => {
+    const { error } = await supabase
+      .from("tasks")
+      .update({ title: newTitle })
+      .eq("id", taskId);
+
+    if (error) {
+      console.error("Error editing task:", error);
+    } else {
+      setTasks(
+        tasks.map((t) => (t.id === taskId ? { ...t, title: newTitle } : t)),
+      );
+    }
+  };
+
   const value = {
     tasks,
+    loading,
     addTask,
     removeTask,
     toggleTask,
     clearCompleted,
     editTask,
   };
+
   return (
     <TasksContext.Provider value={value}>{children}</TasksContext.Provider>
   );

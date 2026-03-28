@@ -2,14 +2,24 @@ import React, { useContext, useState } from "react";
 import TaskItem from "./TaskItem";
 import { TasksContext } from "../context/tasksContext";
 import FilteredButtons from "./filteredButtons";
-import { TextField, Box, Button } from "@mui/material";
+import { TextField, Box, Button, CircularProgress } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { motion, AnimatePresence } from "framer-motion";
+
 export default function TaskList() {
-  const { tasks, clearCompleted } = useContext(TasksContext);
+  const { tasks, loading, clearCompleted } = useContext(TasksContext);
   const [searchBar, setSearchBar] = useState("");
   const [filter, setFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("newest");
+
+  // عرض مؤشر التحميل
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   const filteredByStatus = tasks.filter((task) => {
     if (filter === "active") return !task.completed;
@@ -23,9 +33,9 @@ export default function TaskList() {
 
   const sortedTasks = [...searchedTasks].sort((a, b) => {
     if (sortOrder === "newest") {
-      return new Date(b.createdAt) - new Date(a.createdAt);
+      return new Date(b.created_at) - new Date(a.created_at);
     } else {
-      return new Date(a.createdAt) - new Date(b.createdAt);
+      return new Date(a.created_at) - new Date(b.created_at);
     }
   });
 
@@ -67,7 +77,7 @@ export default function TaskList() {
         tasks={tasks}
       />
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         {sortedTasks.length === 0 ? (
           <motion.div
             key="empty"

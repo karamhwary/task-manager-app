@@ -18,7 +18,6 @@ export default function AddTask() {
       title: taskInput,
       id: crypto.randomUUID(),
       completed: false,
-      createdAt: new Date().toISOString(),
     });
     setTaskInput("");
   }
