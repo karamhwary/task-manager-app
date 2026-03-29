@@ -6,7 +6,7 @@ A modern, full-stack task management application built with React. Manage your t
 
 ## 🚀 Live Demo
 
-[https://subtle-truffle-362c88.netlify.app]=
+[https://subtle-truffle-362c88.netlify.app]
 
 ---
 
