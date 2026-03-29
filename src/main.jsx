@@ -10,12 +10,8 @@ import "./index.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      {" "}
-      {/* ✅ BrowserRouter هنا */}
       <ThemeProvider>
         <AuthProvider>
-          {" "}
-          {/* ✅ AuthProvider داخل BrowserRouter */}
           <TasksProvider>
             <App />
           </TasksProvider>

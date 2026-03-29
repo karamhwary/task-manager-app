@@ -1,8 +1,14 @@
 import React, { useContext, useState } from "react";
 import TaskItem from "./TaskItem";
-import { TasksContext } from "../context/tasksContext";
-import FilteredButtons from "./filteredButtons";
-import { TextField, Box, Button, CircularProgress } from "@mui/material";
+import FilteredButtons from "./FilteredButtons";
+import { TasksContext } from "../../context/TasksContext";
+import {
+  TextField,
+  Box,
+  Button,
+  CircularProgress,
+  InputAdornment,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,7 +18,6 @@ export default function TaskList() {
   const [filter, setFilter] = useState("all");
   const [sortOrder, setSortOrder] = useState("newest");
 
-  // عرض مؤشر التحميل
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
@@ -28,19 +33,18 @@ export default function TaskList() {
   });
 
   const searchedTasks = filteredByStatus.filter((task) =>
-    task.title.toLowerCase().includes(searchBar.toLowerCase()),
+    task.title.toLowerCase().includes(searchBar.toLowerCase())
   );
 
-  const sortedTasks = [...searchedTasks].sort((a, b) => {
-    if (sortOrder === "newest") {
-      return new Date(b.created_at) - new Date(a.created_at);
-    } else {
-      return new Date(a.created_at) - new Date(b.created_at);
-    }
-  });
+  const sortedTasks = [...searchedTasks].sort((a, b) =>
+    sortOrder === "newest"
+      ? new Date(b.created_at) - new Date(a.created_at)
+      : new Date(a.created_at) - new Date(b.created_at)
+  );
 
   return (
     <Box>
+      {/* Search */}
       <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
         <TextField
           fullWidth
@@ -50,26 +54,34 @@ export default function TaskList() {
           onChange={(e) => setSearchBar(e.target.value)}
           size="small"
           InputProps={{
-            startAdornment: <SearchIcon sx={{ mr: 1, color: "gray" }} />,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: "gray" }} />
+              </InputAdornment>
+            ),
           }}
         />
       </Box>
 
-      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+      {/* Sort */}
+      <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
         <Button
           variant={sortOrder === "newest" ? "contained" : "outlined"}
           onClick={() => setSortOrder("newest")}
-          size="small">
+          size="small"
+        >
           Newest First
         </Button>
         <Button
           variant={sortOrder === "oldest" ? "contained" : "outlined"}
           onClick={() => setSortOrder("oldest")}
-          size="small">
+          size="small"
+        >
           Oldest First
         </Button>
       </Box>
 
+      {/* Filters */}
       <FilteredButtons
         clearCompleted={clearCompleted}
         setFilter={setFilter}
@@ -77,22 +89,18 @@ export default function TaskList() {
         tasks={tasks}
       />
 
+      {/* List */}
       <AnimatePresence mode="popLayout">
         {sortedTasks.length === 0 ? (
-          <motion.div
-            key="empty"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}>
-            <Box sx={{ textAlign: "center", py: 4, color: "gray" }}>
-              {searchBar
-                ? "No matching tasks found."
-                : "✨ No tasks yet. Add your first task!"}
-            </Box>
-          </motion.div>
+          <Box sx={{ textAlign: "center", py: 4, color: "gray" }}>
+            {searchBar
+              ? "No matching tasks found."
+              : "✨ No tasks yet. Add your first task!"}
+          </Box>
         ) : (
-          sortedTasks.map((task) => <TaskItem key={task.id} task={task} />)
+          sortedTasks.map((task) => (
+            <TaskItem key={task.id} task={task} />
+          ))
         )}
       </AnimatePresence>
     </Box>

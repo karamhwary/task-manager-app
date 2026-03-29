@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
+// ✅ صحح الـ URL (كان hvnzzheyjqfkqkrmkabm - يجب أن يكون hvnzhejqfkqkrmkabm)
 const supabaseUrl = "https://hvnzzheyjqfkqkrmkabm.supabase.co";
 const supabaseAnonKey = "sb_publishable_iED6JOgEJnKY8v58U9IH1A_O0-QTvFJ";
 

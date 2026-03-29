@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { TasksContext } from "./tasksContext";
-import { supabase } from "../supabaseClient";
+import { TasksContext } from "./TasksContext";
+import { supabase } from "../services/supabaseClient";
 import { useAuth } from "./AuthContext";
 
 export default function TasksProvider({ children }) {
@@ -34,10 +34,7 @@ export default function TasksProvider({ children }) {
   };
 
   const addTask = async (task) => {
-    const newTask = {
-      ...task,
-      user_id: user.id,
-    };
+    const newTask = { ...task, user_id: user.id };
 
     const { data, error } = await supabase
       .from("tasks")
@@ -47,7 +44,7 @@ export default function TasksProvider({ children }) {
     if (error) {
       console.error("Error adding task:", error);
     } else {
-      setTasks([data[0], ...tasks]);
+      setTasks((prev) => [data[0], ...prev]); // ✅ FIX
     }
   };
 
@@ -57,7 +54,7 @@ export default function TasksProvider({ children }) {
     if (error) {
       console.error("Error deleting task:", error);
     } else {
-      setTasks(tasks.filter((task) => task.id !== taskId));
+      setTasks((prev) => prev.filter((task) => task.id !== taskId)); // ✅ FIX
     }
   };
 
@@ -73,11 +70,11 @@ export default function TasksProvider({ children }) {
     if (error) {
       console.error("Error toggling task:", error);
     } else {
-      setTasks(
-        tasks.map((t) =>
-          t.id === taskId ? { ...t, completed: !t.completed } : t,
-        ),
-      );
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === taskId ? { ...t, completed: !t.completed } : t
+        )
+      ); // ✅ FIX
     }
   };
 
@@ -89,13 +86,13 @@ export default function TasksProvider({ children }) {
       .delete()
       .in(
         "id",
-        completedTasks.map((t) => t.id),
+        completedTasks.map((t) => t.id)
       );
 
     if (error) {
       console.error("Error clearing completed:", error);
     } else {
-      setTasks(tasks.filter((t) => !t.completed));
+      setTasks((prev) => prev.filter((t) => !t.completed)); // ✅ FIX
     }
   };
 
@@ -108,9 +105,11 @@ export default function TasksProvider({ children }) {
     if (error) {
       console.error("Error editing task:", error);
     } else {
-      setTasks(
-        tasks.map((t) => (t.id === taskId ? { ...t, title: newTitle } : t)),
-      );
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === taskId ? { ...t, title: newTitle } : t
+        )
+      ); // ✅ FIX
     }
   };
 

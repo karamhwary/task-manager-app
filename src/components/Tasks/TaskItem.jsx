@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { TasksContext } from "../context/tasksContext";
+import { TasksContext } from "../../context/TasksContext";
 import {
   ListItem,
   Checkbox,
@@ -12,7 +12,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function TaskItem({ task }) {
   const { removeTask, toggleTask, editTask } = useContext(TasksContext);
@@ -24,10 +24,6 @@ export default function TaskItem({ task }) {
     if (editText.trim() === "") return;
     editTask(task.id, editText);
     setIsEditing(false);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") handleSave();
   };
 
   if (isEditing) {
@@ -49,7 +45,7 @@ export default function TaskItem({ task }) {
             fullWidth
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(e) => e.key === "Enter" && handleSave()}
             autoFocus
             size="small"
           />
@@ -101,7 +97,6 @@ export default function TaskItem({ task }) {
             flex: 1,
             textDecoration: task.completed ? "line-through" : "none",
             color: task.completed ? "text.secondary" : "text.primary",
-            transition: "all 0.2s",
           }}>
           {task.title}
         </Typography>

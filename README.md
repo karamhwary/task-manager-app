@@ -1,46 +1,76 @@
-# 📝 Todo List App
+# 📝 Task Manager App
 
-A modern, feature-rich Todo List application built with React. Manage your daily tasks with dark mode, search, filtering, sorting, and persistent storage.
+A modern, full-stack task management application built with React. Manage your tasks with authentication, dark mode, search, filtering, sorting, and cloud storage.
 
-![Todo List App Screenshot](screenshot.png)
+![Task Manager Screenshot](https://via.placeholder.com/800x400?text=Task+Manager+App)
 
 ## 🚀 Live Demo
 
-[View Live Demo](https://karam-todo-app.netlify.app)
+[https://task-manager-app.netlify.app](https://task-manager-app.netlify.app)
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| ➕ **Add Tasks** | Create new tasks with a title |
-| ✏️ **Edit Tasks** | Modify existing task titles |
-| ✅ **Complete Tasks** | Mark tasks as complete/incomplete |
-| 🗑️ **Delete Tasks** | Remove individual tasks |
-| 🧹 **Clear Completed** | Delete all completed tasks at once |
-| 🔍 **Search** | Filter tasks by title text |
-| 🏷️ **Filter** | View All / Active / Completed tasks |
-| 📅 **Sort** | Sort tasks by date (Newest/Oldest first) |
-| 🌙 **Dark Mode** | Toggle between light and dark themes |
-| 💾 **Persistent Storage** | Tasks saved in browser localStorage |
-| 📱 **Responsive** | Works on desktop, tablet, and mobile |
+| Feature                | Description                              |
+| ---------------------- | ---------------------------------------- |
+| 🔐 **Authentication**  | Sign up / Sign in with Supabase          |
+| ☁️ **Cloud Storage**   | Tasks saved in Supabase database         |
+| 👤 **User-specific**   | Each user sees their own tasks           |
+| ➕ **Add Tasks**       | Create new tasks with a title            |
+| ✏️ **Edit Tasks**      | Modify existing task titles              |
+| ✅ **Complete Tasks**  | Mark tasks as complete/incomplete        |
+| 🗑️ **Delete Tasks**    | Remove individual tasks                  |
+| 🧹 **Clear Completed** | Delete all completed tasks at once       |
+| 🔍 **Search**          | Filter tasks by title text               |
+| 🏷️ **Filter**          | View All / Active / Completed tasks      |
+| 📅 **Sort**            | Sort tasks by date (Newest/Oldest first) |
+| 🌙 **Dark Mode**       | Toggle between light and dark themes     |
+| 📱 **Responsive**      | Works on desktop, tablet, and mobile     |
+| 🎨 **Material UI**     | Modern component library                 |
+| ✨ **Animations**      | Smooth transitions with Framer Motion    |
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| **React 18** | UI library |
-| **Context API + useReducer** | State management |
-| **Material UI (MUI)** | Component library |
-| **Framer Motion** | Animations |
-| **Vite** | Build tool |
-| **localStorage** | Data persistence |
-| **Git & GitHub** | Version control |
-| **Netlify** | Deployment |
+| Technology                   | Purpose                   |
+| ---------------------------- | ------------------------- |
+| **React 18**                 | UI library                |
+| **Vite**                     | Build tool                |
+| **Context API + useReducer** | State management          |
+| **Supabase**                 | Authentication & Database |
+| **Material UI (MUI)**        | Component library         |
+| **Framer Motion**            | Animations                |
+| **React Router**             | Navigation                |
+| **Git & GitHub**             | Version control           |
+| **Netlify**                  | Deployment                |
 
 ---
 
 ## 📁 Project Structure
+
+src/
+├── components/
+│ ├── tasks/
+│ │ ├── AddTask.jsx
+│ │ ├── TaskList.jsx
+│ │ ├── TaskItem.jsx
+│ │ └── FilteredButtons.jsx
+│ └── common/
+│ └── ProtectedRoute.jsx
+├── pages/
+│ ├── auth/
+│ │ ├── Login.jsx
+│ │ └── Signup.jsx
+│ └── Dashboard.jsx
+├── context/
+│ ├── AuthContext.jsx
+│ ├── TasksContext.jsx
+│ ├── TasksProvider.jsx
+│ └── ThemeContext.jsx
+├── services/
+│ └── supabaseClient.js
+├── App.jsx
+└── main.jsx
+
